@@ -49,7 +49,7 @@ class DeterministicSelectTest {
 
         System.out.println("Deterministic Select on " + size + " elements took: " + duration + " nanoseconds.");
 
-        metrics.saveMetricsToCSV(duration, "DeterministicSelect" + size);
+        metrics.writeMetricsToCSV(duration, "DeterministicSelect" + size);
 
         int[] sortedArr = arr.clone();
         Arrays.sort(sortedArr);

@@ -37,7 +37,7 @@ class ClosestPairTest {
 
         System.out.printf("Finding closest pair for %d points took: %d nanoseconds.%n", size, duration);
 
-        metrics.saveMetricsToCSV(duration, "ClosestPair" + size);
+        metrics.writeMetricsToCSV(duration, "ClosestPair" + size);
 
         double expectedDistance = bruteForceChecker(points);
         assertEquals(expectedDistance, actualDistance, 1e-9, "The calculated distance should match the brute-force result.");

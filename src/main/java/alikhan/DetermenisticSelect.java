@@ -16,7 +16,7 @@ class DeterministicSelect {
         }
 
         int[] arrCopy = Arrays.copyOf(arr, arr.length);
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         return deterministicSelectHelper(arrCopy, k, 0, arrCopy.length - 1, metrics);
     }
@@ -25,24 +25,24 @@ class DeterministicSelect {
         metrics.increaseRecursionDepth();
 
         ArrayList<Integer> medians = new ArrayList<>();
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         for (int i = 0; i < arr.length; i += 5) {
             int end = Math.min(i + 5, arr.length);
             int[] group = Arrays.copyOfRange(arr, i, end);
-            metrics.incrementMemoryAllocationCount();
+            metrics.incrementAllocationCounter();
             Arrays.sort(group);
             medians.add(group[group.length / 2]);
         }
 
-        metrics.incrementComparisonCount();
+        metrics.incrementComparisonCounter();
         if (medians.size() <= 1) {
             metrics.decreaseRecursionDepth();
             return medians.get(0);
         }
 
         int[] mediansArray = medians.stream().mapToInt(Integer::intValue).toArray();
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         int result = medianOfMedians(mediansArray, metrics);
         metrics.decreaseRecursionDepth();
@@ -52,24 +52,24 @@ class DeterministicSelect {
     private static int deterministicSelectHelper(int[] arr, int k, int left, int right, AlgorithmMetricsTracker metrics) {
         metrics.increaseRecursionDepth();
 
-        metrics.incrementComparisonCount();
+        metrics.incrementComparisonCounter();
         if (left == right) {
             metrics.decreaseRecursionDepth();
             return arr[left];
         }
 
         int[] subarray = Arrays.copyOfRange(arr, left, right + 1);
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
         int pivot = medianOfMedians(subarray, metrics);
 
         int pivotIndex = partition(arr, left, right, pivot, metrics);
 
-        metrics.incrementComparisonCount();
+        metrics.incrementComparisonCounter();
         if (k == pivotIndex) {
             metrics.decreaseRecursionDepth();
             return arr[k];
         } else if (k < pivotIndex) {
-            metrics.incrementComparisonCount();
+            metrics.incrementComparisonCounter();
             int result = deterministicSelectHelper(arr, k, left, pivotIndex - 1, metrics);
             metrics.decreaseRecursionDepth();
             return result;
@@ -87,7 +87,7 @@ class DeterministicSelect {
 
         int i = left;
         for (int j = left; j < right; j++) {
-            metrics.incrementComparisonCount();
+            metrics.incrementComparisonCounter();
             if (arr[j] <= pivot) {
                 swap(arr, i, j);
                 i++;
@@ -99,7 +99,7 @@ class DeterministicSelect {
 
     private static int findPivotIndex(int[] arr, int left, int right, int pivot, AlgorithmMetricsTracker metrics) {
         for (int i = left; i <= right; i++) {
-            metrics.incrementComparisonCount();
+            metrics.incrementComparisonCounter();
             if (arr[i] == pivot) {
                 return i;
             }

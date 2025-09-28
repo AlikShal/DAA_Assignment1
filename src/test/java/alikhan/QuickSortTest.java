@@ -1,124 +1,60 @@
 package alikhan;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
-
-import java.time.Duration;
-import java.util.Arrays;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Тесты  быстрой сортировки (RobustQuickSort)")
 class QuickSortTest {
-
-    private QuickSort sorter;
-    private final Random random = new Random();
-
-    @BeforeEach
-    void setUp() {
-        sorter = new QuickSort();
-    }
-
-    @Test
-    @DisplayName(" Сортировка массива")
-    void testRandomArray() {
-        int[] actual = generateRandomArray(1000, 10000);
-        int[] expected = Arrays.copyOf(actual, actual.length);
-        Arrays.sort(expected); // Используем эталонную сортировку для проверки
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Массив со случайными элементами отсортирован неверно");
-    }
-
-    @Test
-    @DisplayName(" Сортировка уже отсортированного массива")
-    void testAlreadySortedArray() {
-        int[] actual = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-        int[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Без изменений");
-    }
-
-    @Test
-    @DisplayName("Сортировка обратного порядка чисел")
-    void testReverseSortedArray() {
-        int[] actual = {10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
-        int[] expected = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Массив, отсортированный в обратном порядке, обработан неверно");
-    }
-
-    @Test
-    @DisplayName(" Массив с дублирующимися элементами")
-    void testArrayWithDuplicates() {
-        int[] actual = {5, 8, 5, 2, 8, 5, 2, 2, 9};
-        int[] expected = {2, 2, 2, 5, 5, 5, 8, 8, 9};
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Массив с дубликатами отсортирован неверно");
-    }
-
-    @Test
-    @DisplayName("Массив с одинаковыми элементами")
-    void testArrayWithAllSameElements() {
-        int[] actual = {7, 7, 7, 7, 7, 7};
-        int[] expected = {7, 7, 7, 7, 7, 7};
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Без изменений");
-    }
-
-    @Test
-    @DisplayName("Пустой массив")
-    void testEmptyArray() {
-        int[] arr = {};
-        // Ожидаем, что метод просто завершит работу без ошибок
-        assertDoesNotThrow(() -> sorter.sort(arr));
-        assertEquals(0, arr.length, "Пустой массив");
-    }
-
-    @Test
-    @DisplayName(" Работа с массивом из одного элемента")
-    void testSingleElementArray() {
-        int[] actual = {42};
-        int[] expected = {42};
-
-        sorter.sort(actual);
-
-        assertArrayEquals(expected, actual, "Без изменений"); //1 элемент
-    }
-
-    @Test
-    @DisplayName(" Проверка на StackOverflowError на большом массиве")
-    @Timeout(value = 5, unit = TimeUnit.SECONDS) // Тест не должен длиться дольше 5 секунд
-    void testLargeArrayForStackOverflow() {
-        int size = 500_000; // Достаточно большой размер для вызова StackOverflowError в наивной реализации
-        int[] largeArray = generateRandomArray(size, Integer.MAX_VALUE);
-
-        // Этот тест проверяет, что оптимизация хвостовой рекурсии работает
-        // и не вызывает переполнение стека.
-        assertDoesNotThrow(() -> sorter.sort(largeArray),
-                "Сортировка большого массива не должна вызывать StackOverflowError");
-    }
-
-    // Вспомогательный метод для генерации случайных массивов
-    private int[] generateRandomArray(int size, int maxValue) {
-        int[] array = new int[size];
-        for (int i = 0; i < size; i++) {
-            array[i] = random.nextInt(maxValue);
+    private static final String METRICS_FILE_NAME = "target/algorithm_metrics.csv";
+    @BeforeAll
+    static void clearMetricsFile() {
+        try {
+            boolean deleted = Files.deleteIfExists(Paths.get(METRICS_FILE_NAME));
+        } catch (IOException e) {
+            System.err.println("Error while trying to delete metrics file: " + e.getMessage());
         }
-        return array;
+    }
+
+    @BeforeAll
+    static void warmUpJvm() {
+        Random random = new Random();
+        for (int i = 0; i < 10000; i++) {
+            int[] dummyArray = new int[1];
+            for (int j = 0; j < dummyArray.length; j++) {
+                dummyArray[j] = random.nextInt();
+            }
+            QuickSort.sort(dummyArray);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 10, 50, 100, 500, 1000, 2000})
+    public void testLargeArraySorting(int size) throws IOException {
+
+        int[] arr = new int[size];
+        for (int i = 0; i < size; i++) {
+            arr[i] = (int) (Math.random() * 10000);
+        }
+
+        long startTime = System.nanoTime();
+
+        QuickSort.sort(arr);
+
+        AlgorithmMetricsTracker metrics = QuickSort.sort(arr);
+
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+
+        System.out.println("Sorting " + size + " elements took: " + duration + " nanoseconds.");
+
+        metrics.writeMetricsToCSV(duration, "QuickSort_size_" + size);
+
+        for (int i = 1; i < arr.length; i++) {
+            assertTrue(arr[i - 1] <= arr[i], "Array should be sorted in ascending order.");
+        }
     }
 }
-

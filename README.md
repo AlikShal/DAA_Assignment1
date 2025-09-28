@@ -1,8 +1,6 @@
-Here’s a fully paraphrased and polished **README** combining your algorithm descriptions and GitHub workflow, ready to upload:
 
----
 
-# Algorithm Lab: Divide-and-Conquer Benchmarks
+# Assignment 1: Divide-and-Conquer 
 
 This project provides implementations of classic divide-and-conquer algorithms in **Java 17**, with a focus on safe recursion, performance measurement, and validation against theoretical expectations.
 
@@ -34,7 +32,6 @@ The algorithms use standard divide-and-conquer strategies with optimizations to 
 * The strip check examines **up to 7 neighboring points** to find the closest pair.
 * Recursion depth is approximately **log₂(n)**.
 
----
 
 ## 2. Recurrence and Complexity Analysis
 
@@ -45,9 +42,49 @@ The algorithms use standard divide-and-conquer strategies with optimizations to 
 | Deterministic Select | T(n) = T(n/5) + T(≤7n/10) + Θ(n) | Θ(n)                                  | Median-of-Medians pivot, recursion into k-th element only           |
 | Closest Pair (2D)    | T(n) = 2T(n/2) + Θ(n)            | Θ(n log n)                            | Strip check adds a constant factor, depth ≈ log₂(n)                 |
 
----
 
-## 3. GitHub Workflow
+## 3. Performance Visualization
+
+Graphs in the project illustrate how execution time and recursion depth vary with input size, providing insight into the efficiency and behavior of each algorithm.
+ 
+Merge Sort
+---
+Time vs n
+
+![Time vs n Plot](Image/MergeSortTime.png)
+Recursion Depth vs n
+
+![ Depth vs n Plot](Image/MergeSortDepth.png)
+
+
+QuickSort
+---
+Time vs n
+
+![Time vs n Plot](Image/QuickSortTime.png)
+Recursion Depth vs n
+
+![ Depth vs n Plot](Image/QuickSortDepth.png)
+
+DetermenisticSelect
+---
+Time vs n
+
+![Time vs n Plot](Image/DetermineTime.png)
+Recursion Depth vs n
+
+![ Depth vs n Plot](Image/DetermineDepth.png)
+
+ClosestPair
+---
+Time vs n
+
+![Time vs n Plot](Image/ClosestTime.png)
+Recursion Depth vs n
+
+![ Depth vs n Plot](Image/ClosestDepth.png)
+
+## 4. GitHub Workflow
 
 ### Branches
 
@@ -73,23 +110,4 @@ The algorithms use standard divide-and-conquer strategies with optimizations to 
 * **Correctness**: Each algorithm is verified against known solutions (e.g., Select compared to `Arrays.sort(a)[k]`).
 * **Performance**: Recursion depth and execution time are measured to ensure alignment with theoretical complexity.
 
----
 
-## 4. Performance Visualization
-
-Graphs in the project illustrate how execution time and recursion depth vary with input size, providing insight into the efficiency and behavior of each algorithm.
-
----
-
-This version is **ready to upload to GitHub** and includes:
-
-* Algorithm descriptions and optimizations
-* Recurrence analysis and complexity table
-* GitHub workflow with branches, commits, and testing
-* Performance visualization notes
-
----
-
-If you want, I can also **add example commands and screenshots for testing in IntelliJ** to make this README fully beginner-friendly.
-
-Do you want me to do that?

@@ -41,7 +41,7 @@ public class MergeSortTest {
 
         System.out.println("Sorting " + size + " elements took: " + duration + " nanoseconds.");
 
-        metrics.saveMetricsToCSV(duration, "MergeSort" + size);
+        metrics.writeMetricsToCSV(duration, "MergeSort" + size);
 
         for (int i = 1; i < arr.length; i++) {
             assertTrue(arr[i - 1] <= arr[i], "Array should be sorted in ascending order.");

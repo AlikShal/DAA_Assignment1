@@ -10,7 +10,7 @@ public class MergeSort {
 
         int[] buffer = new int[arr.length];
         mergeSort(arr, buffer, 0, arr.length - 1, metrics);
-        metrics.incrementMemoryAllocationCount(); // Account for final allocation after sorting
+        metrics.incrementAllocationCounter(); // Account for final allocation after sorting
 
         return metrics;
     }
@@ -42,7 +42,7 @@ public class MergeSort {
         int k = left;
 
         while (i <= mid && j <= right) {
-            metrics.incrementComparisonCount();  // Increment comparison count
+            metrics.incrementComparisonCounter();  // Increment comparison count
             if (buffer[i] <= buffer[j]) {
                 arr[k++] = buffer[i++];
             } else {
@@ -71,7 +71,7 @@ public class MergeSort {
             while (j >= left && arr[j] > key) {
                 arr[j + 1] = arr[j];
                 j--;
-                metrics.incrementComparisonCount();  // Track comparison count
+                metrics.incrementComparisonCounter();  // Track comparison count
             }
             arr[j + 1] = key;  // Insert the key into the correct position
         }

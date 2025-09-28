@@ -12,11 +12,11 @@ public class ClosestPair {
         }
 
         Point[] pointsByX = Arrays.copyOf(points, points.length);
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
         Arrays.sort(pointsByX, Comparator.comparingDouble(Point::x));
 
         Point[] pointsByY = Arrays.copyOf(points, points.length);
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
         Arrays.sort(pointsByY, Comparator.comparingDouble(Point::y));
 
         return findRecursive(pointsByX, pointsByY, metrics);
@@ -24,7 +24,7 @@ public class ClosestPair {
 
     private static double findRecursive(Point[] pointsByX, Point[] pointsByY, AlgorithmMetricsTracker metrics) {
         metrics.increaseRecursionDepth();
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         int n = pointsByX.length;
 
@@ -39,11 +39,11 @@ public class ClosestPair {
 
         Point[] leftHalfByX = Arrays.copyOfRange(pointsByX, 0, mid);
         Point[] rightHalfByX = Arrays.copyOfRange(pointsByX, mid, n);
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         List<Point> leftHalfByY = new ArrayList<>();
         List<Point> rightHalfByY = new ArrayList<>();
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         for (Point p : pointsByY) {
             if (p.x() <= midPoint.x()) {
@@ -56,14 +56,14 @@ public class ClosestPair {
         double deltaLeft = findRecursive(leftHalfByX, leftHalfByY.toArray(new Point[0]), metrics);
         double deltaRight = findRecursive(rightHalfByX, rightHalfByY.toArray(new Point[0]), metrics);
 
-        metrics.incrementComparisonCount();
+        metrics.incrementComparisonCounter();
         double delta = Math.min(deltaLeft, deltaRight);
 
         List<Point> stripPoints = new ArrayList<>();
-        metrics.incrementMemoryAllocationCount();
+        metrics.incrementAllocationCounter();
 
         for (Point p : pointsByY) {
-            metrics.incrementComparisonCount();
+            metrics.incrementComparisonCounter();
             if (Math.abs(p.x() - midPoint.x()) < delta) {
                 stripPoints.add(p);
             }
@@ -72,9 +72,9 @@ public class ClosestPair {
         for (int i = 0; i < stripPoints.size(); i++) {
             for (int j = i + 1; j < stripPoints.size()
                     && (stripPoints.get(j).y() - stripPoints.get(i).y()) < delta; j++) {
-                metrics.incrementComparisonCount();
+                metrics.incrementComparisonCounter();
                 double d = distance(stripPoints.get(i), stripPoints.get(j));
-                metrics.incrementComparisonCount();
+                metrics.incrementComparisonCounter();
                 if (d < delta) {
                     delta = d;
                 }
@@ -89,9 +89,9 @@ public class ClosestPair {
         double minDistance = Double.POSITIVE_INFINITY;
         for (int i = 0; i < points.length; i++) {
             for (int j = i + 1; j < points.length; j++) {
-                metrics.incrementComparisonCount();
+                metrics.incrementComparisonCounter();
                 double d = distance(points[i], points[j]);
-                metrics.incrementComparisonCount();
+                metrics.incrementComparisonCounter();
                 if (d < minDistance) {
                     minDistance = d;
                 }
