@@ -33,7 +33,7 @@ The algorithms employ standard divide-and-conquer strategies with optimizations 
 * The strip check examines **up to 7 neighboring points** to find the closest pair.
 * Recursion depth remains roughly **log₂(n)**.
 
----
+
 
 ## 2. Recurrence and Complexity Analysis
 
@@ -63,12 +63,10 @@ The expected behavior of each algorithm is summarized below:
 * Master Theorem, Case 2 → **Θ(n log n)**
 * Strip check adds a constant factor; recursion depth remains around **log₂(n)**.
 
----
 
 ## 3. Performance Visualization
 
 Graphs included in the project illustrate how execution time and recursion depth vary with input size, providing a clear view of each algorithm’s practical performance characteristics.
 
----
 
-Do you want me to also **reformat it into proper Markdown** with headings, code blocks, and bullet points for GitHub display?
+
