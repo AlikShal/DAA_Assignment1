@@ -52,6 +52,7 @@ Merge Sort
 Time vs n
 
 ![Time vs n Plot](Image/MergeSortTime.png)
+
 Recursion Depth vs n
 
 ![ Depth vs n Plot](Image/MergeSortDepth.png)
@@ -62,6 +63,7 @@ QuickSort
 Time vs n
 
 ![Time vs n Plot](Image/QuickSortTime.png)
+
 Recursion Depth vs n
 
 ![ Depth vs n Plot](Image/QuickSortDepth.png)
@@ -71,6 +73,7 @@ DetermenisticSelect
 Time vs n
 
 ![Time vs n Plot](Image/DetermineTime.png)
+
 Recursion Depth vs n
 
 ![ Depth vs n Plot](Image/DetermineDepth.png)
@@ -80,6 +83,7 @@ ClosestPair
 Time vs n
 
 ![Time vs n Plot](Image/ClosestTime.png)
+
 Recursion Depth vs n
 
 ![ Depth vs n Plot](Image/ClosestDepth.png)
