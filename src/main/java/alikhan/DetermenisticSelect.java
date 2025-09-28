@@ -1,0 +1,115 @@
+package alikhan;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class DeterministicSelect {
+    public static AlgorithmMetricsTracker lastRunMetrics;
+
+    public static int deterministicSelect(int[] arr, int k) {
+        AlgorithmMetricsTracker metrics = new AlgorithmMetricsTracker();
+        lastRunMetrics = metrics;
+
+        if (arr == null || k < 0 || k >= arr.length) {
+            throw new IllegalArgumentException("Invalid input array or k");
+        }
+
+        int[] arrCopy = Arrays.copyOf(arr, arr.length);
+        metrics.incrementMemoryAllocationCount();
+
+        return deterministicSelectHelper(arrCopy, k, 0, arrCopy.length - 1, metrics);
+    }
+
+    private static int medianOfMedians(int[] arr, AlgorithmMetricsTracker metrics) {
+        metrics.increaseRecursionDepth();
+
+        ArrayList<Integer> medians = new ArrayList<>();
+        metrics.incrementMemoryAllocationCount();
+
+        for (int i = 0; i < arr.length; i += 5) {
+            int end = Math.min(i + 5, arr.length);
+            int[] group = Arrays.copyOfRange(arr, i, end);
+            metrics.incrementMemoryAllocationCount();
+            Arrays.sort(group);
+            medians.add(group[group.length / 2]);
+        }
+
+        metrics.incrementComparisonCount();
+        if (medians.size() <= 1) {
+            metrics.decreaseRecursionDepth();
+            return medians.get(0);
+        }
+
+        int[] mediansArray = medians.stream().mapToInt(Integer::intValue).toArray();
+        metrics.incrementMemoryAllocationCount();
+
+        int result = medianOfMedians(mediansArray, metrics);
+        metrics.decreaseRecursionDepth();
+        return result;
+    }
+
+    private static int deterministicSelectHelper(int[] arr, int k, int left, int right, AlgorithmMetricsTracker metrics) {
+        metrics.increaseRecursionDepth();
+
+        metrics.incrementComparisonCount();
+        if (left == right) {
+            metrics.decreaseRecursionDepth();
+            return arr[left];
+        }
+
+        int[] subarray = Arrays.copyOfRange(arr, left, right + 1);
+        metrics.incrementMemoryAllocationCount();
+        int pivot = medianOfMedians(subarray, metrics);
+
+        int pivotIndex = partition(arr, left, right, pivot, metrics);
+
+        metrics.incrementComparisonCount();
+        if (k == pivotIndex) {
+            metrics.decreaseRecursionDepth();
+            return arr[k];
+        } else if (k < pivotIndex) {
+            metrics.incrementComparisonCount();
+            int result = deterministicSelectHelper(arr, k, left, pivotIndex - 1, metrics);
+            metrics.decreaseRecursionDepth();
+            return result;
+        } else {
+            int result = deterministicSelectHelper(arr, k, pivotIndex + 1, right, metrics);
+            metrics.decreaseRecursionDepth();
+            return result;
+        }
+    }
+
+    private static int partition(int[] arr, int left, int right, int pivot, AlgorithmMetricsTracker metrics) {
+        int pivotIndex = findPivotIndex(arr, left, right, pivot, metrics);
+        if (pivotIndex == -1) return left;
+        swap(arr, pivotIndex, right);
+
+        int i = left;
+        for (int j = left; j < right; j++) {
+            metrics.incrementComparisonCount();
+            if (arr[j] <= pivot) {
+                swap(arr, i, j);
+                i++;
+            }
+        }
+        swap(arr, i, right);
+        return i;
+    }
+
+    private static int findPivotIndex(int[] arr, int left, int right, int pivot, AlgorithmMetricsTracker metrics) {
+        for (int i = left; i <= right; i++) {
+            metrics.incrementComparisonCount();
+            if (arr[i] == pivot) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+}
