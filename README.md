@@ -114,4 +114,7 @@ Recursion Depth vs n
 * **Correctness**: Each algorithm is verified against known solutions (e.g., Select compared to `Arrays.sort(a)[k]`).
 * **Performance**: Recursion depth and execution time are measured to ensure alignment with theoretical complexity.
 
+### Conclusion
+
+This project demonstrates the implementation of classic divide-and-conquer algorithms in Java, emphasizing safe recursion, performance measurement, and correctness. Each algorithm—MergeSort, QuickSort, Deterministic Select, and Closest Pair of Points—has been optimized to control recursion depth and memory usage. Performance tests and visualizations confirm that execution times and recursion depths align with theoretical expectations, validating both the efficiency and accuracy of the implementations.
 
