@@ -23,15 +23,6 @@ class ClosestPairTest {
         }
     }
 
-    @BeforeAll
-    static void warmUpJvm() {
-        for (int i = 0; i < 5000; i++) {
-            Point[] dummyPoints = generateRandomPoints(100);
-            AlgorithmMetricsTracker dummyMetrics = new AlgorithmMetricsTracker();
-            ClosestPair.findClosestPair(dummyPoints, dummyMetrics);
-        }
-    }
-
     @ParameterizedTest
     @ValueSource(ints = {2, 10, 50, 100, 500, 1000, 2000})
     public void testClosestPairWithRandomData(int size) throws IOException {

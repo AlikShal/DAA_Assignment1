@@ -22,18 +22,6 @@ class DeterministicSelectTest {
         }
     }
 
-    @BeforeAll
-    static void warmUpJvm() {
-        Random random = new Random();
-        for (int i = 0; i < 10000; i++) {
-            int[] dummyArray = new int[10];
-            for (int j = 0; j < dummyArray.length; j++) {
-                dummyArray[j] = random.nextInt();
-            }
-            DeterministicSelect.deterministicSelect(dummyArray, 0);
-        }
-    }
-
     @BeforeEach
     void resetStaticMetrics() {
         DeterministicSelect.lastRunMetrics = null;
